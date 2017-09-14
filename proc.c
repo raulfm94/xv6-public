@@ -15,6 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
+struct proc * pToKill;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -552,5 +553,20 @@ procdump(void)
         cprintf(" %p", pc[i]);
     }
     cprintf("\n");
+  }
+
+  void
+  processToKill(void)
+  {
+    if(pToKill->state == RUNNING){
+      kill(pToKill->pid);
+    }
+    //return 0;
+  }
+
+  void
+  printHello(void)
+  {
+    cprintf("Hello from console");
   }
 }

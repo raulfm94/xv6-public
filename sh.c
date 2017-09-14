@@ -158,20 +158,19 @@ main(void)
 
   // Read and run input commands.
   while(getcmd(buf + 1, sizeof(buf) - 1) >= 0){
-    if (buf[1] == '\n') {
+    if(buf[1] == 'c' && buf[2] == 'd' && buf[3] == ' '){
+      // Chdir must be called by the parent, not the child.
+      buf[strlen(buf)-1] = 0;  // chop \n
+      if(chdir(buf+4) < 0)
+        printf(2, "cannot cd %s\n", buf+4);
       continue;
     }
-      if(buf[1] == 'c' && buf[2] == 'd' && buf[3] == ' '){
-        // Chdir must be called by the parent, not the child.
-        buf[strlen(buf)-1] = 0;  // chop \n
-        if(chdir(buf+4) < 0)
-          printf(2, "cannot cd %s\n", buf+4);
-        continue;
-      }
-      if(fork1() == 0)
-        runcmd(parsecmd(buf));
-        wait();
-      }
+    if(buf[1] == '\n')
+      continue;
+    if(fork1() == 0)
+      runcmd(parsecmd(buf));
+    wait();
+  }
   exit();
 }
 

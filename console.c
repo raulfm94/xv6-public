@@ -193,7 +193,7 @@ extern void processToKill(void);
 void
 consoleintr(int (*getc)(void))
 {
-  int c, doprocdump, doPrintHello, doProcessToKill = 0;
+  int c, doprocdump = 0, doPrintHello = 0, doProcessToKill = 0;
 
   acquire(&cons.lock);
   while((c = getc()) >= 0){
@@ -201,7 +201,7 @@ consoleintr(int (*getc)(void))
     // New case for C
     case C('C'):
       doProcessToKill = 1;
-      doPrintHello = 1;
+      //doPrintHello = 1;
       break;
     case C('P'):  // Process listing.
       // procdump() locks cons.lock indirectly; invoke later

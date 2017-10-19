@@ -570,7 +570,8 @@ printHello(void)
   cprintf("Hello from console");
 }
 
-int killproc(void){
+int
+killproc(void){
   if(pToKill!=0){
     kill(pToKill->pid);
   }

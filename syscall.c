@@ -138,6 +138,7 @@ static int (*syscalls[])(void) = {
 [SYS_shmem] sys_shmem,
 [SYS_shmat] sys_shmat,
 [SYS_shdemat] sys_shdemat,
+[SYS_chmod] sys_chmod
 };
 
 void

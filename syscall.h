@@ -26,4 +26,7 @@
 #define SYS_shmem 25
 #define SYS_shmat 26
 #define SYS_shdemat 27
-#define SYS_chmod 28
+#define SYS_getppid 28
+#define SYS_signal  29
+#define SYS_killsignal  30
+#define SYS_chmod 31

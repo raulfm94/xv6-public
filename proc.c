@@ -7,6 +7,7 @@
 #include "proc.h"
 #include "spinlock.h"
 
+#define NULL = 0
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
@@ -142,6 +143,10 @@ userinit(void)
   safestrcpy(p->name, "initcode", sizeof(p->name));
   p->cwd = namei("/");
   p->priority = 125;
+  p->signals[0] = NULL + 0;
+  p->signals[1] = NULL + 0;
+  p->signals[2] = NULL+ 0;
+  p->signals[3] = NULL + 0;
   // this assignment to p->state lets other cores
   // run this process. the acquire forces the above
   // writes to be visible, and the lock is also needed
@@ -563,6 +568,33 @@ processToKill(void)
     kill(myproc()->pid);
   }  //return 0;
 }
+
+int
+sys_killsignal(void)
+{
+    int pid;
+    int signum;
+    struct proc *p;
+
+    if(argint(0, &pid) < 0) return -1;
+    if(argint(1, &signum) < 0) return -1;
+    if(signum > 4 || signum < 1) return -1;
+
+    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+      if(p->pid == pid) break;
+
+    if(p->pid != pid) return -1;
+
+    signum -=1;
+    if((int)p->signals[signum] == -1) kill(p->pid);
+
+    p->tf->esp -= 4;
+
+    p->tf->eip = (uint)p->signals[signum];
+
+    return 1;
+}
+
 
 void
 printHello(void)
